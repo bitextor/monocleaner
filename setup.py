@@ -19,7 +19,7 @@ setuptools.setup(
     description="Monolingual corpus classifier",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/bitextor/bicleaner",
+    url="https://github.com/bitextor/monocleaner",
     packages=setuptools.find_packages(),
     classifiers=[
         "Environment :: Console",
@@ -38,7 +38,7 @@ setuptools.setup(
         "Macocu": "https://macocu.eu/"
     },
     scripts=[
-        "scripts/bicleaner-classify",
+        "scripts/monocleaner",
         "scripts/monocleaner-train",
     ]
 )

@@ -2,15 +2,14 @@
 
 import sys
 import traceback
-import logging
 import monocleaner.util as util
-import monocleaner.monocleaner_score as scorer
+import monocleaner.monocleaner as scorer
 
 def main(argv):
     try:
         util.logging_setup()
         args = scorer.initialization() # Parsing parameters
-        scorer.main(args)  # Running main program
+        scorer.perform_scoring(args)  # Running main program
     except Exception as ex:
         tb = traceback.format_exc()
         logging.error(tb)

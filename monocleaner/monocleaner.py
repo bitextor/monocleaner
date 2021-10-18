@@ -8,11 +8,11 @@ import os
 try:
     from .lm import *
     from .util import logging_setup, check_if_folder
-    from .hardrules import wrong_tu
+    from .hardrules import wrong_segment
 except (SystemError, ImportError):
     from lm import *
     from util import logging_setup, check_if_folder
-    from hardrules import wrong_tu
+    from hardrules import wrong_segment
 
 def initialization():
     parser = ArgumentParser()
@@ -69,7 +69,7 @@ def perform_scoring(args):
         nline += 1
 
         sentence = line.rstrip("\n")
-        tag = wrong_tu(sentence, args)
+        tag = wrong_segment(sentence, args)
         if tag == "keep":
             score = args.ff.score(sentence)
         else:

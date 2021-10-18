@@ -80,7 +80,10 @@ def perform_scoring(args):
         # print hardrule annotation if requested
         if not args.score_only:
             args.output.write(sentence + '\t')
-        args.output.write(f"{score}")
+        if tag != "keep":
+            args.output.write(f"{score}")
+        else:
+            args.output.write(f"{score:.3f}")
         if args.annotated_output:
             args.output.write('\t' + tag)
         args.output.write("\n")

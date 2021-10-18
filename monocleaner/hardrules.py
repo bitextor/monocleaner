@@ -160,6 +160,8 @@ def c_no_porn(left, right, model, side, porn_tokenizer):
     return model.predict(porn_tokenizer.detokenize(tok))[0][0] == '__label__negative'
 
 def wrong_tu(sent, args, lm_filter = None):
+    if args.disable_hardrules:
+        return "keep"
     if not sent:
         return "c_no_empty"
     if len(sent) >= 1024:

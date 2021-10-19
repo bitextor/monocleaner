@@ -14,11 +14,14 @@ except (SystemError, ImportError):
     from util import logging_setup, check_if_folder
     from hardrules import wrong_segment
 
+__author__ = "Jaume Zaragoza"
+__version__ = "Version 1.0 # 19/10/2021 # Initial release # Jaume Zaragoza"
+
 def initialization():
     parser = ArgumentParser()
     parser.add_argument("model_dir", type=check_if_folder, help="Model directory to store LM file and metadata.")
     parser.add_argument("input", type=argparse.FileType('r'), nargs='?', help="Input file. If omitted, read from 'stdin'.")
-    parser.add_argument("output", type=argparse.FileType('w'), nargs='?', help="Output file. If omitted, write to 'stdout'.")
+    parser.add_argument("output", type=argparse.FileType('w'), nargs='?', help="Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.")
     #parser.add_argument("--lm_threshold", type=float, default=0.5)
     #parser.add_argument("--disable_lm_filter", action='store_true')
     parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied')
@@ -27,6 +30,7 @@ def initialization():
     parser.add_argument("--annotated_output", action='store_true')
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
+    parser.add_argument('-v', '--version', action='version', version="%(prog)s " + __version__, help="show version of this script and exit")
 
     args = parser.parse_args()
 

@@ -72,13 +72,13 @@ monocleaner [-h]
             [-q]
             model_dir [input] [output]
 ```
-If input and output it will read from stdin and write to stdout.
+If input and output are omitted, it will read from stdin and write to stdout.
 
 ### Parameters
 * Positional arguments:
   * `model_dir`: Directory where the model is stored.
   * `input`: Input text file, one sentence per line. When omitted jointly with output, it will read from stdin.
-  * `output`: Output text file. When omitted output will be written to stdout.
+  * `output`: Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.
 * Optional arguments:
   * `--score_only`: Only output one column which is the monocleaner score (default: False)
   * `--disable_hardrules`: Disables the hardrules filtering (only monocleaner fluency scoring is applied) (default: False)
@@ -93,7 +93,7 @@ If input and output it will read from stdin and write to stdout.
 monocleaner models/es mono.es.txt mono.es.scored.txt
 ```
 
-This will use the Spanish model located at `models/es`, read `mono.es.txt` file and write the sentences to `mono.es.scored.txt` adding the monocleaner score.
+This will use the Spanish model located at `models/es`, read `mono.es.txt` file and write the sentences to `mono.es.scored.txt` adding the monocleaner score column.
 
 ___
 

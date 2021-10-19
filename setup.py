@@ -16,7 +16,7 @@ setuptools.setup(
     author_email="info@prompsit.com",
     maintainer="Jaume Zaragoza",
     maintainer_email="jzaragoza@prompsit.com",
-    description="Monolingual corpus classifier",
+    description="Monolingual corpus fluency filter",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bitextor/monocleaner",

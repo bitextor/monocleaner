@@ -3,15 +3,15 @@ import logging
 
 try:
     from .lm import *
-    from .util import logging_setup
+    from .util import logging_setup, check_if_folder
 except (SystemError, ImportError):
     from lm import *
-    from util import logging_setup
+    from util import logging_setup, check_if_folder
 
 def initialization():
     parser = ArgumentParser()
     parser.add_argument("train", type=str, help="Training corpus. One sentence per line monolingual data.")
-    parser.add_argument("model_dir", type=str, help="Model directory to store LM file and metadata.")
+    parser.add_argument("model_dir", type=check_if_folder, help="Model directory to store LM file and metadata.")
     parser.add_argument("-l", "--language", type=str, required=True, help="Language code of the model.")
     parser.add_argument("--dev_size", default=4000, type=int, help="Number of sentences used to estimate mean and stddev perplexity on noisy and clean text. Extracted from training the training corpus.")
     parser.add_argument("--lm_type", default=LMType.CHARACTER, type=lambda t: LMType[t], choices=list(LMType))

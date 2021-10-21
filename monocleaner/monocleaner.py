@@ -65,7 +65,10 @@ def load_model(args):
                         metadata["noisy_stddev_perp"])
         args.ff.load(args.lm_file, stats)
 
-        args.fastspell = FastSpell.FastSpell(args.language, mode="cons")
+        if args.disable_lang_ident:
+            args.fastspell = None
+        else:
+            args.fastspell = FastSpell.FastSpell(args.language, mode="cons")
 
 def perform_scoring(args):
     time_start = default_timer()

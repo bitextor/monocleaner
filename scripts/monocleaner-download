@@ -1,0 +1,39 @@
+#!/bin/bash
+
+usage() {
+    echo "Script to download Bicleaner language packs."
+    echo
+    echo "Usage: `basename $0` <lang> <download_path>"
+    echo "      <lang>         Language code."
+    echo "      <download_path> Path where downloaded language pack should be placed."
+}
+
+invalid_url(){
+    wget -S --spider -o - $1 | grep -q '404 Not Found'
+}
+
+if [[ $# -lt 2 ]]
+then
+    echo "Wrong number of arguments: $@" 2>&1
+    usage 2>&1
+    exit 1
+fi
+
+URL="https://github.com/bitextor/monocleaner-data/releases/latest/download"
+L1=$1
+if [ "$3" != "" ]; then
+    DOWNLOAD_PATH=$3
+else
+    DOWNLOAD_PATH="."
+fi
+
+if invalid_url $URL/$L1.tgz
+then
+    >&2 echo $L1 language pack does not exist
+else
+    wget -P $DOWNLOAD_PATH $URL/$L1.tgz
+    tar xvf $DOWNLOAD_PATH/$L1.tgz -C $DOWNLOAD_PATH
+    rm $DOWNLOAD_PATH/$L1.tgz
+fi
+
+echo Finished >&2

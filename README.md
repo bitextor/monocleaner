@@ -8,7 +8,7 @@ It indicates the fluency of a sentence with a score between 1 and 0, where the h
 Sentences considered to have obvious poor fluency are tagged with a 0.
 
 Although a training tool (`monocleaner-train`) is provided, you may want to use the available ready-to-use language packages.
-Please, visit https://github.com/bitextor/monocleaner-data/releases/latest or use `./utils/download-pack.sh` to download the latest language packages.
+Please, visit https://github.com/bitextor/monocleaner-data/releases/latest or use `monocleaner-download` to download the latest language packages.
 
 ## Citation
 

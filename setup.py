@@ -40,5 +40,6 @@ setuptools.setup(
     scripts=[
         "scripts/monocleaner",
         "scripts/monocleaner-train",
+        "scripts/monocleaner-download",
     ]
 )

@@ -2,7 +2,6 @@ import unicodedata
 import logging
 import regex
 import sys
-#from fastspell import FastSpell
 
 tbl_non_alpha = [chr(i) for i in range(sys.maxunicode) if not unicodedata.category(chr(i)).startswith('L')]
 tbl_non_alpha = str.maketrans('', '', ''.join(tbl_non_alpha))
@@ -159,7 +158,7 @@ def c_no_porn(left, right, model, side, porn_tokenizer):
         tok = porn_tokenizer.tokenize(right.lower())
     return model.predict(porn_tokenizer.detokenize(tok))[0][0] == '__label__negative'
 
-def wrong_segment(sent, args, lm_filter = None):
+def wrong_segment(sent, args):
     if args.disable_hardrules:
         return "keep"
     if not sent:
@@ -202,10 +201,8 @@ def wrong_segment(sent, args, lm_filter = None):
         return 'sent.istitle()'
 #    elif (not args.disable_lang_ident and not  c_reliable_long_language(sent, args.language)):
 #        return "c_reliable_long_language"
-#    elif (not args.disable_lang_ident and not  fastspell_src.getlang(sent)==args.language):
-#        return "c_wrong_language"
+    elif (not args.disable_lang_ident and not  args.fastspell.getlang(sent)==args.language):
+        return "c_wrong_language"
 #    elif not args.disable_porn_removal and porn_removal != None and not c_no_porn(sent, right, porn_removal, args.metadata_yaml['porn_removal_side'], porn_tokenizer):
 #        return "c_no_porn"
-#    elif  args.disable_lm_filter == False and lm_filter.score(sent) < args.lm_threshold:
-#        return "lm_filter.score(sent) < args.lm_threshold"
     return "keep"

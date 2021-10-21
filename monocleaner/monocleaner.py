@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from timeit import default_timer
+from fastspell import FastSpell
 import logging
 import yaml
 import sys
@@ -23,8 +24,7 @@ def initialization():
     parser.add_argument("input", type=argparse.FileType('r'), nargs='?', help="Input file. If omitted, read from 'stdin'.")
     parser.add_argument("output", type=argparse.FileType('w'), nargs='?', help="Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.")
     parser.add_argument("--scol", default=1, type=check_positive, help ="Sentence column (starting in 1)")
-    #parser.add_argument("--lm_threshold", type=float, default=0.5)
-    #parser.add_argument("--disable_lm_filter", action='store_true')
+    parser.add_argument("--disable_lang_ident", action='store_true')
     parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied')
     parser.add_argument("--disable_minimal_length", action='store_true', help="Don't apply minimal length (3 words) rule")
     parser.add_argument("--score_only", action='store_true')
@@ -64,6 +64,8 @@ def load_model(args):
                         metadata["noisy_mean_perp"],
                         metadata["noisy_stddev_perp"])
         args.ff.load(args.lm_file, stats)
+
+        args.fastspell = FastSpell.FastSpell(args.language, mode="cons")
 
 def perform_scoring(args):
     time_start = default_timer()

@@ -12,7 +12,11 @@ invalid_url(){
     wget -S --spider -o - $1 | grep -q '404 Not Found'
 }
 
-if [[ $# -lt 2 ]]
+if [[ $1 == "-h" ]] || [[ $1 == "--help" ]];
+then
+    usage 2>&1
+    exit 0
+elif [[ $# -lt 2 ]];
 then
     echo "Wrong number of arguments: $@" 2>&1
     usage 2>&1

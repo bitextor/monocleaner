@@ -7,11 +7,11 @@ import os
 
 try:
     from .lm import *
-    from .util import logging_setup, check_if_folder
+    from .util import logging_setup, check_if_folder, check_positive
     from .hardrules import wrong_segment
 except (SystemError, ImportError):
     from lm import *
-    from util import logging_setup, check_if_folder
+    from util import logging_setup, check_if_folder, check_positive
     from hardrules import wrong_segment
 
 __author__ = "Jaume Zaragoza"
@@ -22,6 +22,7 @@ def initialization():
     parser.add_argument("model_dir", type=check_if_folder, help="Model directory to store LM file and metadata.")
     parser.add_argument("input", type=argparse.FileType('r'), nargs='?', help="Input file. If omitted, read from 'stdin'.")
     parser.add_argument("output", type=argparse.FileType('w'), nargs='?', help="Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.")
+    parser.add_argument("--scol", default=1, type=check_positive, help ="Sentence column (starting in 1)")
     #parser.add_argument("--lm_threshold", type=float, default=0.5)
     #parser.add_argument("--disable_lm_filter", action='store_true')
     parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied')
@@ -71,8 +72,14 @@ def perform_scoring(args):
     nline = 0
     for line in args.input:
         nline += 1
+        parts = line.rstrip("\n").split("\t")
 
-        sentence = line.rstrip("\n")
+        if len(parts) >= args.scol:
+            sentence = parts[args.scol-1]
+        else:
+            logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
+            continue
+
         tag = wrong_segment(sentence, args)
         if tag == "keep":
             score = args.ff.score(sentence)
@@ -83,7 +90,7 @@ def perform_scoring(args):
         # print sentence when no score_only
         # print hardrule annotation if requested
         if not args.score_only:
-            args.output.write(sentence + '\t')
+            args.output.write(line.rstrip("\n") + '\t')
         if tag != "keep":
             args.output.write(f"{score}")
         else:

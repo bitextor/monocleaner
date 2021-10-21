@@ -53,6 +53,19 @@ The remaining extra modules required by Monocleaner will be automatically downlo
 
 After installation, two binary files (`monocleaner-train` and `monocleaner`) will be located in your `python/installation/prefix/bin` directory. This is usually `$HOME/.local/bin` or `/usr/local/bin/`.
 
+Monocleaner uses [FastSpell](https://github.com/mbanon/fastspell) that requires `python-dev` and `libhunspell-dev`:
+```bash
+sudo apt install python-dev libhunspell-dev
+```
+
+Also note that Hunspell language packages must be installed by hand if you are going to work with one of languages listed as [similar](https://github.com/mbanon/fastspell/blob/main/fastspell/config/similar.yaml), i.e.:
+```
+sudo apt-get install hunspell-es
+```
+or downloaded from an external source, such as https://github.com/wooorm/dictionaries/tree/main/dictionaries
+
+You can also provide the path to the Hunspell dictionaries directories by using the dictpath atribute in `{/YOUR/INSTALLATION/PATH}/config/hunspell.yaml` (for example, `venv/lib/python3.7/site-packages/fastspell/config/hunspell.yaml` ) if you are installing from PyPI or with `setup.py`, or in `/config/hunspell.yaml` if you are running directly the code. Default path is `/usr/share/hunspell`.
+
 ## Scoring
 `monocleaner` aims at detecting poor fluent sentences in a monolingual corpus.
 It indicates the fluency of a sentence with a score between 1 and 0, where the higher score, the better the fluency is.

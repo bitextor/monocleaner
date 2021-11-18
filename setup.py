@@ -4,13 +4,10 @@ import setuptools
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-with open("requirements.txt") as rf:
-    requirements = rf.read().splitlines()
 
 setuptools.setup(
     name="monocleaner",
     version="1.0",
-    install_requires=requirements,
     license="GNU General Public License v3.0",
     author="Prompsit Language Engineering",
     author_email="info@prompsit.com",
@@ -21,6 +18,14 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/bitextor/monocleaner",
     packages=setuptools.find_packages(),
+    install_requires=[
+        "regex",
+        "toolwrapper",
+        "sacremoses",
+        "numpy",
+        "pyyaml",
+        "fastspell>=0.1.5",
+    ],
     classifiers=[
         "Environment :: Console",
         "Intended Audience :: Science/Research",

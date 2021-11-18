@@ -16,7 +16,7 @@ except (SystemError, ImportError):
     from hardrules import wrong_segment
 
 __author__ = "Jaume Zaragoza"
-__version__ = "Version 1.0 # 19/10/2021 # Initial release # Jaume Zaragoza"
+__version__ = "Version 1.0 # 18/11/2021 # Initial release # Jaume Zaragoza"
 
 def initialization():
     parser = ArgumentParser()

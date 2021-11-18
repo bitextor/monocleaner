@@ -16,7 +16,7 @@ except (SystemError, ImportError):
     from hardrules import wrong_segment
 
 __author__ = "Jaume Zaragoza"
-__version__ = "Version 1.0 # 18/11/2021 # Initial release # Jaume Zaragoza"
+__version__ = "Version 1.0.0 # 2021-11-18 # Initial release # Jaume Zaragoza"
 
 def initialization():
     parser = ArgumentParser()
@@ -24,11 +24,11 @@ def initialization():
     parser.add_argument("input", type=argparse.FileType('r'), nargs='?', help="Input file. If omitted, read from 'stdin'.")
     parser.add_argument("output", type=argparse.FileType('w'), nargs='?', help="Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.")
     parser.add_argument("--scol", default=1, type=check_positive, help ="Sentence column (starting in 1)")
-    parser.add_argument("--disable_lang_ident", action='store_true')
-    parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied')
+    parser.add_argument("--disable_lang_ident", action='store_true', help="Disables language identification in hardrules")
+    parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied)')
     parser.add_argument("--disable_minimal_length", action='store_true', help="Don't apply minimal length (3 words) rule")
-    parser.add_argument("--score_only", action='store_true')
-    parser.add_argument("--annotated_output", action='store_true')
+    parser.add_argument("--score_only", action='store_true', help="Only print the score for each sentence, omit all fields")
+    parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
     parser.add_argument('-v', '--version', action='version', version="%(prog)s " + __version__, help="show version of this script and exit")

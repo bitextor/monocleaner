@@ -25,8 +25,8 @@ fi
 
 URL="https://github.com/bitextor/monocleaner-data/releases/latest/download"
 L1=$1
-if [ "$3" != "" ]; then
-    DOWNLOAD_PATH=$3
+if [ "$2" != "" ]; then
+    DOWNLOAD_PATH=$2
 else
     DOWNLOAD_PATH="."
 fi

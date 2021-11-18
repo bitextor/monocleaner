@@ -3,3 +3,4 @@ toolwrapper
 sacremoses
 numpy
 pyyaml
+fastspell>=0.1.5

@@ -68,7 +68,7 @@ def load_model(args):
         if args.disable_lang_ident:
             args.fastspell = None
         else:
-            args.fastspell = FastSpell.FastSpell(args.language, mode="cons")
+            args.fastspell = FastSpell.FastSpell(args.language, mode="aggr")
 
 def perform_scoring(args):
     time_start = default_timer()

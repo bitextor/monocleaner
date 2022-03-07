@@ -5,6 +5,7 @@
 - `--add_lang_ident` to append a column with identified language code.
 
 ### Changed
+- FastSpell mode to aggressive.
 
 ### Fixed
 

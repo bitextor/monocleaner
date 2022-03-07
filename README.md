@@ -81,6 +81,7 @@ monocleaner [-h]
             [--disable_hardrules]
             [--score_only]
             [--annotated_output]
+            [--add_lang_ident]
             [--debug]
             [-q]
             model_dir [input] [output]
@@ -94,6 +95,7 @@ If input and output are omitted, it will read from stdin and write to stdout.
   * `output`: Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.
 * Optional arguments:
   * `--score_only`: Only output one column which is the monocleaner score (default: False)
+  * `--add_lang_ident`: Add another column with the identified language if it's not disabled.
   * `--disable_hardrules`: Disables the hardrules filtering (only monocleaner fluency scoring is applied) (default: False)
   * `--disable_minimal_length` : Don't apply minimal length rule (default: False).
 * Logging:

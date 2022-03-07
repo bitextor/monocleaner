@@ -17,6 +17,7 @@ except (SystemError, ImportError):
 
 __author__ = "Jaume Zaragoza"
 __version__ = "Version 1.0.0 # 2021-11-18 # Initial release # Jaume Zaragoza"
+__version__ = "Version 1.1.0 # 2021-03-07 # Add lang ident column # Jaume Zaragoza"
 
 def initialization():
     parser = ArgumentParser()
@@ -28,6 +29,7 @@ def initialization():
     parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied)')
     parser.add_argument("--disable_minimal_length", action='store_true', help="Don't apply minimal length (3 words) rule")
     parser.add_argument("--score_only", action='store_true', help="Only print the score for each sentence, omit all fields")
+    parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled.")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
@@ -75,6 +77,7 @@ def perform_scoring(args):
     logging.info("Start scoring text")
 
     nline = 0
+    langid = None
     for line in args.input:
         nline += 1
         parts = line.rstrip("\n").split("\t")
@@ -85,15 +88,21 @@ def perform_scoring(args):
             logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
             continue
 
+        # Hardrules and fluency score
         tag = wrong_segment(sentence, args)
         if tag == "keep":
             score = args.ff.score(sentence)
         else:
             score = 0
 
+        # Language identification
+        if not args.disable_lang_ident and args.add_lang_ident:
+            langid = args.fastspell.getlang(args.language)
+
         # always print score
         # print sentence when no score_only
         # print hardrule annotation if requested
+        # print identified language if requested
         if not args.score_only:
             args.output.write(line.rstrip("\n") + '\t')
         if tag != "keep":
@@ -102,6 +111,8 @@ def perform_scoring(args):
             args.output.write(f"{score:.3f}")
         if args.annotated_output:
             args.output.write('\t' + tag)
+        if langid is not None:
+            args.output.write('\t' + langid)
         args.output.write("\n")
 
     # Print elapsed time and avg speed

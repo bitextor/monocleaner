@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.0 2022-03-07
+### Added
+- `--add_lang_ident` to append a column with identified language code.
+
+### Changed
+
+### Fixed
+
 ## v1.0.0 2021-11-18
 
 ### Added
@@ -10,4 +18,4 @@
 - Monolingual character-based fluency filter.
 - Monolingual hardrules version.
 
-### Fixes
+### Fixed

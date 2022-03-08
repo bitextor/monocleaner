@@ -105,14 +105,14 @@ def perform_scoring(args):
         # print identified language if requested
         if not args.score_only:
             args.output.write(line.rstrip("\n") + '\t')
+        if langid is not None:
+            args.output.write(langid + '\t')
         if tag != "keep":
             args.output.write(f"{score}")
         else:
             args.output.write(f"{score:.3f}")
         if args.annotated_output:
             args.output.write('\t' + tag)
-        if langid is not None:
-            args.output.write('\t' + langid)
         args.output.write("\n")
 
     # Print elapsed time and avg speed

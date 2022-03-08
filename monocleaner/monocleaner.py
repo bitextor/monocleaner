@@ -97,7 +97,7 @@ def perform_scoring(args):
 
         # Language identification
         if not args.disable_lang_ident and args.add_lang_ident:
-            langid = args.fastspell.getlang(args.language)
+            langid = args.fastspell.getlang(sentence)
 
         # always print score
         # print sentence when no score_only

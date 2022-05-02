@@ -67,7 +67,7 @@ or downloaded from an external source, such as https://github.com/wooorm/diction
 You can also provide the path to the Hunspell dictionaries directories by using the dictpath atribute in `{/YOUR/INSTALLATION/PATH}/config/hunspell.yaml` (for example, `venv/lib/python3.7/site-packages/fastspell/config/hunspell.yaml` ) if you are installing from PyPI or with `setup.py`, or in `/config/hunspell.yaml` if you are running directly the code. Default path is `/usr/share/hunspell`.
 
 ## Scoring
-`monocleaner` aims aims to detect disfluent sentences in a monolingual corpus.
+`monocleaner` aims to detect disfluent sentences in a monolingual corpus.
 Each sentence assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
 In addition to a continuous score, several handwritten `hardrules` assign a score of 0 to obviously poor sentences.
 

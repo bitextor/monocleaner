@@ -3,9 +3,9 @@
 
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
-Monocleaner is a Python tool that aims at detecting poor fluent sentences in a monolingual corpus.
-It indicates the fluency of a sentence with a score between 1 and 0, where the higher score, the better the fluency is.
-Sentences considered to have obvious poor fluency are tagged with a 0.
+Monocleaner is a Python tool that aims to detect disfluent sentences in a monolingual corpus.
+Each sentence assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
+In addition to a continuous score, several handwritten rules assign a score of 0 to obviously poor sentences.
 
 Although a training tool (`monocleaner-train`) is provided, you may want to use the available ready-to-use language packages.
 Please, visit https://github.com/bitextor/monocleaner-data/releases/latest or use `monocleaner-download` to download the latest language packages.
@@ -67,9 +67,9 @@ or downloaded from an external source, such as https://github.com/wooorm/diction
 You can also provide the path to the Hunspell dictionaries directories by using the dictpath atribute in `{/YOUR/INSTALLATION/PATH}/config/hunspell.yaml` (for example, `venv/lib/python3.7/site-packages/fastspell/config/hunspell.yaml` ) if you are installing from PyPI or with `setup.py`, or in `/config/hunspell.yaml` if you are running directly the code. Default path is `/usr/share/hunspell`.
 
 ## Scoring
-`monocleaner` aims at detecting poor fluent sentences in a monolingual corpus.
-It indicates the fluency of a sentence with a score between 1 and 0, where the higher score, the better the fluency is.
-Sentences considered to have obvious poor fluency are tagged with a 0.
+`monocleaner` aims aims to detect disfluent sentences in a monolingual corpus.
+Each sentence assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
+In addition to a continuous score, several handwritten `hardrules` assign a score of 0 to obviously poor sentences.
 
 The input file (monolingual corpus) must contain one sentence per line text.
 The generated output file will contain the same lines adding a column containing the Monocleaner fluency score.

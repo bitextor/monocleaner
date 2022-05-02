@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 
 Monocleaner is a Python tool that aims to detect disfluent sentences in a monolingual corpus.
-Each sentence assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
+Each sentence is assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
 In addition to a continuous score, several handwritten rules assign a score of 0 to obviously poor sentences.
 
 Although a training tool (`monocleaner-train`) is provided, you may want to use the available ready-to-use language packages.
@@ -68,7 +68,7 @@ You can also provide the path to the Hunspell dictionaries directories by using 
 
 ## Scoring
 `monocleaner` aims to detect disfluent sentences in a monolingual corpus.
-Each sentence assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
+Each sentence is assigned a fluency score between 0 and 1, with higher scores indicating more fluency.
 In addition to a continuous score, several handwritten `hardrules` assign a score of 0 to obviously poor sentences.
 
 The input file (monolingual corpus) must contain one sentence per line text.

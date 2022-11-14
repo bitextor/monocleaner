@@ -28,6 +28,7 @@ def initialization():
     parser.add_argument("--disable_lang_ident", action='store_true', help="Disables language identification in hardrules")
     parser.add_argument("--disable_hardrules", action='store_true', help='Disables the hardrules filtering (only monocleaner fluency scoring is applied)')
     parser.add_argument("--disable_minimal_length", action='store_true', help="Don't apply minimal length (3 words) rule")
+    parser.add_argument("--disable_hbs", action='store_true', help="Don't group Serbo-Croatian under 'hbs' tag")
     parser.add_argument("--score_only", action='store_true', help="Only print the score for each sentence, omit all fields")
     parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled.")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
@@ -70,7 +71,7 @@ def load_model(args):
         if args.disable_lang_ident:
             args.fastspell = None
         else:
-            args.fastspell = FastSpell.FastSpell(args.language, mode="aggr")
+            args.fastspell = FastSpell(args.language, mode="aggr", hbs=not args.disable_hbs)
 
 def perform_scoring(args):
     time_start = default_timer()

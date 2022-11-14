@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="monocleaner",
-    version="1.1",
+    version="1.2",
     license="GNU General Public License v3.0",
     author="Prompsit Language Engineering",
     author_email="info@prompsit.com",

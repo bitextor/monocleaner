@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2 2022-11-14
+### Changed
+- Request FastSpell to tag all Serbo-Croatian variants under `hbs`.
+
 ## v1.1.0 2022-03-07
 ### Added
 - `--add_lang_ident` to append a column with identified language code.

@@ -30,7 +30,8 @@ def initialization():
     parser.add_argument("--disable_minimal_length", action='store_true', help="Don't apply minimal length (3 words) rule")
     parser.add_argument("--disable_hbs", action='store_true', help="Don't group Serbo-Croatian under 'hbs' tag")
     parser.add_argument("--score_only", action='store_true', help="Only print the score for each sentence, omit all fields")
-    parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled.")
+    parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled")
+    parser.add_argument("--detect_script", action='store_true', help="Detect writing script with FastSpell (only Serbo-Croatian is supported)")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
@@ -71,7 +72,9 @@ def load_model(args):
         if args.disable_lang_ident:
             args.fastspell = None
         else:
-            args.fastspell = FastSpell(args.language, mode="aggr", hbs=not args.disable_hbs)
+            args.fastspell = FastSpell(args.language, mode="aggr",
+                                       hbs=not args.disable_hbs,
+                                       script=args.detect_script)
 
 def perform_scoring(args):
     time_start = default_timer()

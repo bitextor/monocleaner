@@ -92,16 +92,23 @@ def perform_scoring(args):
             logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
             continue
 
-        # Hardrules and fluency score
+        # Obtain hardrules tag
         tag = wrong_segment(sentence, args)
+
+        # Language identification
+        if not args.disable_lang_ident:
+            # Obtain fastspell prediction, lowercasing helps in small langs
+            langid = args.fastspell.getlang(sentence.lower())
+            # Hardrule of langident here, to avoid calling fastspell two times
+            # have the language prediction available to print it
+            if tag == "keep" and langid != args.language:
+                tag = 'c_wrong_language'
+
+        # Score with lm non discarded sentences
         if tag == "keep":
             score = args.ff.score(sentence)
         else:
             score = 0
-
-        # Language identification
-        if not args.disable_lang_ident and args.add_lang_ident:
-            langid = args.fastspell.getlang(sentence.lower())
 
         # always print score
         # print sentence when no score_only

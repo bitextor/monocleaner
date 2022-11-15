@@ -201,8 +201,8 @@ def wrong_segment(sent, args):
         return 'sent.istitle()'
 #    elif (not args.disable_lang_ident and not  c_reliable_long_language(sent, args.language)):
 #        return "c_reliable_long_language"
-    elif (not args.disable_lang_ident and not  args.fastspell.getlang(sent.lower())==args.language):
-        return "c_wrong_language"
+#    elif (not args.disable_lang_ident and not  args.fastspell.getlang(sent.lower())==args.language):
+#        return "c_wrong_language"
 #    elif not args.disable_porn_removal and porn_removal != None and not c_no_porn(sent, right, porn_removal, args.metadata_yaml['porn_removal_side'], porn_tokenizer):
 #        return "c_no_porn"
     return "keep"

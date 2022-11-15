@@ -96,12 +96,20 @@ def perform_scoring(args):
         tag = wrong_segment(sentence, args)
 
         # Language identification
-        if not args.disable_lang_ident:
+        # Only run if not disabled or not discarded or if it's requested in the output
+        if not args.disable_lang_ident and (args.add_lang_ident or tag == 'keep'):
             # Obtain fastspell prediction, lowercasing helps in small langs
             langid = args.fastspell.getlang(sentence.lower())
+
+            # Separate langid from the detected script
+            if args.detect_script:
+                langid_no_suffix = langid.split('_')[0]
+            else:
+                langid_no_suffix = langid
+
             # Hardrule of langident here, to avoid calling fastspell two times
             # have the language prediction available to print it
-            if tag == "keep" and langid != args.language:
+            if tag == "keep" and langid_no_suffix != args.language:
                 tag = 'c_wrong_language'
 
         # Score with lm non discarded sentences

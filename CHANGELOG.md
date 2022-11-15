@@ -8,6 +8,9 @@
 - Update FastSpell to `0.4`.
 - Call FastSpell only one time when `--add_lang_ident`
 
+### Fixed
+- Discarding sentences as wrong\_language when detect script is enabled.
+
 ## v1.2 2022-11-14
 ### Changed
 - Request FastSpell to tag all Serbo-Croatian variants under `hbs`.

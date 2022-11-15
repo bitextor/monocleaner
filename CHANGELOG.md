@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+### Added
+- Add option to detect Serbo-Croatian script with FastSpell.
+
+### Changed
+- Update FastSpell to `0.4`.
+
 ## v1.2 2022-11-14
 ### Changed
 - Request FastSpell to tag all Serbo-Croatian variants under `hbs`.

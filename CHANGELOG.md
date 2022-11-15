@@ -10,6 +10,7 @@
 
 ### Fixed
 - Discarding sentences as wrong\_language when detect script is enabled.
+- Discarding sentences as wrong\_language when hardrules is disabled.
 
 ## v1.2 2022-11-14
 ### Changed

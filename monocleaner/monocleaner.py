@@ -109,7 +109,9 @@ def perform_scoring(args):
 
             # Hardrule of langident here, to avoid calling fastspell two times
             # have the language prediction available to print it
-            if tag == "keep" and langid_no_suffix != args.language:
+            if not args.disable_hardrules \
+                    and tag == "keep" \
+                    and langid_no_suffix != args.language:
                 tag = 'c_wrong_language'
 
         # Score with lm non discarded sentences

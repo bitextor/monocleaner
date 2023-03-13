@@ -69,6 +69,9 @@ def perform_training(args):
         os.remove(dev_file)
         os.remove(dev_noisy)
 
-if __name__ == "__main__":
+def main():
     args = initialization()
     perform_training(args)
+
+if __name__ == "__main__":
+    main()

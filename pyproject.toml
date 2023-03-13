@@ -1,0 +1,55 @@
+[project]
+name = "monocleaner"
+version = "1.2"
+authors = [
+    { name = "Prompsit Language Engineering", email = "info@prompsit.com" },
+]
+maintainers = [
+    { name = "Jaume Zaragoza", email = "jzaragoza@prompsit.com" },
+]
+description = "Monolingual corpus fluency filter"
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3.8",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Filters",
+]
+dependencies = [
+    "regex",
+    "toolwrapper",
+    "sacremoses",
+    "numpy",
+    "pyyaml",
+    "fastspell==0.8",
+]
+
+[project.license]
+text = "GNU General Public License v3.0"
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[build-system]
+requires = [ "setuptools>=61.2,<66", ]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/bitextor/monocleaner"
+"Monocleaner on GitHub" = "https://github.com/bitextor/monocleaner"
+"Prompsit Language Engineering" = "http://www.prompsit.com"
+Macocu = "https://macocu.eu/"
+
+[tool.setuptools]
+script-files = [
+    "scripts/monocleaner-download",
+]
+
+[project.scripts]
+monocleaner = "monocleaner.monocleaner:main"
+monocleaner-train = "monocleaner.monocleaner_train:main"

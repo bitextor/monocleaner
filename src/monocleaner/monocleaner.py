@@ -148,7 +148,9 @@ def perform_scoring(args):
     else:
         logging.info(f"Output file: {os.path.abspath(args.output.name)}")
 
-
-if __name__ == "__main__":
+def main():
     args = initialization()
     perform_scoring(args)
+
+if __name__ == "__main__":
+    main()

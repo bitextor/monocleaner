@@ -5,8 +5,11 @@
 - Add option to detect Serbo-Croatian script with FastSpell.
 
 ### Changed
-- Update FastSpell to `0.4`.
+- Update FastSpell to `0.8`.
+    - Better coverage for Icelandic.
+    - Automatic installation of dictionaries.
 - Call FastSpell only one time when `--add_lang_ident`
+- Migrate to pyproject and src/ code structure.
 
 ### Fixed
 - Discarding sentences as wrong\_language when detect script is enabled.

@@ -7,17 +7,15 @@ import sys
 import os
 
 try:
+    from . import __version__
     from .lm import *
     from .util import logging_setup, check_if_folder, check_positive
     from .hardrules import wrong_segment
 except (SystemError, ImportError):
+    from monocleaner import __version__
     from lm import *
     from util import logging_setup, check_if_folder, check_positive
     from hardrules import wrong_segment
-
-__author__ = "Jaume Zaragoza"
-__version__ = "Version 1.0.0 # 2021-11-18 # Initial release # Jaume Zaragoza"
-__version__ = "Version 1.1.0 # 2021-03-07 # Add lang ident column # Jaume Zaragoza"
 
 def initialization():
     parser = ArgumentParser()

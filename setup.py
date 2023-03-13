@@ -24,7 +24,7 @@ setuptools.setup(
         "sacremoses",
         "numpy",
         "pyyaml",
-        "fastspell==0.4",
+        "fastspell==0.8",
     ],
     classifiers=[
         "Environment :: Console",

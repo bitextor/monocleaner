@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.3 2023-03-15
 ### Added
 - Add option to detect Serbo-Croatian script with FastSpell.
 

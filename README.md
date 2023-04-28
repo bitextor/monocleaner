@@ -31,15 +31,15 @@ If you find Monocleaner useful, please consider citing the following papers:
 ```
 
 ## Installation & Requirements
-Monocleaner uses [FastSpell](https://github.com/mbanon/fastspell) that requires `python-dev` and `libhunspell-dev`:
+Monocleaner uses [FastSpell](https://github.com/mbanon/fastspell) that requires `python-dev`:
 ```bash
-sudo apt install python-dev libhunspell-dev
+sudo apt install python-dev
 ```
 
 Monocleaner can be installed using `pip`:
 
 ```bash
-python3.7 -m pip install monocleaner
+python3 -m pip install monocleaner
 ```
 
 Monocleaner requires the [KenLM](https://github.com/kpu/kenlm) Python bindings with support for 7-gram language models. You can easily install it by running the following commands:

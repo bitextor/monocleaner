@@ -26,7 +26,7 @@ dependencies = [
     "sacremoses",
     "numpy",
     "pyyaml",
-    "fastspell==0.9",
+    "fastspell==0.9.1",
 ]
 
 [project.license]

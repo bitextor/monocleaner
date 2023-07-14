@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.4.1
+## v1.5
 ### Added
 - `monocleaner-download` quiet mode.
 

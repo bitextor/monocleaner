@@ -1,5 +1,4 @@
 from tempfile import TemporaryFile, NamedTemporaryFile
-from sacremoses import MosesPunctNormalizer
 from subprocess import PIPE
 from enum import Enum
 import typing
@@ -17,9 +16,11 @@ import os
 try:
     from .util import shuffle_file
     from .tokenizer import Tokenizer
+    from .normalize import MosesPunctNormalizer
 except (SystemError, ImportError):
     from util import shuffle_file
     from tokenizer import Tokenizer
+    from normalize import MosesPunctNormalizer
 
 
 class LMType(Enum):

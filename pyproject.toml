@@ -1,6 +1,6 @@
 [project]
 name = "monocleaner"
-version = "1.4"
+version = "1.4.1"
 requires-python = ">=3.8"
 authors = [
     { name = "Prompsit Language Engineering", email = "info@prompsit.com" },

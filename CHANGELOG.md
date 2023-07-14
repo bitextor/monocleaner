@@ -1,6 +1,9 @@
 # Changelog
 
 ## v1.4.1
+### Added
+- `monocleaner-download` quiet mode.
+
 ### Changed
 - Precompile punctuation normalization regular expressions for better speed.
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## v1.4
+## v1.4.1
 ### Changed
 - Precompile punctuation normalization regular expressions for better speed.
+
+## v1.4
+### Changed
+- Update FastSpell to 0.9.1.
 
 ## v1.3 2023-03-15
 ### Added

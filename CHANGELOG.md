@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.5
+### Added
+- `monocleaner-download` quiet mode.
+
+### Changed
+- Precompile punctuation normalization regular expressions for better speed.
+
+## v1.4
+### Changed
+- Update FastSpell to 0.9.1.
+
 ## v1.3 2023-03-15
 ### Added
 - Add option to detect Serbo-Croatian script with FastSpell.

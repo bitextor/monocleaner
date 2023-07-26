@@ -1,6 +1,6 @@
 [project]
 name = "monocleaner"
-version = "1.5"
+version = "1.6"
 requires-python = ">=3.8"
 authors = [
     { name = "Prompsit Language Engineering", email = "info@prompsit.com" },
@@ -54,3 +54,4 @@ script-files = [
 [project.scripts]
 monocleaner = "monocleaner.monocleaner:main"
 monocleaner-train = "monocleaner.monocleaner_train:main"
+monocleaner-hardrules = "monocleaner.hardrules:main"

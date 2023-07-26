@@ -68,13 +68,18 @@ The generated output file will contain the same lines adding a column containing
 This tool can be run with
 ```bash
 monocleaner [-h]
-            [--disable_minimal_length]
+            [--scol SCOL]
+            [--disable_lang_ident] 
             [--disable_hardrules]
+            [--disable_minimal_length]
+            [--disable_hbs]
             [--score_only]
             [--annotated_output]
             [--add_lang_ident]
+            [--detect_script]
             [--debug]
             [-q]
+            [-v]
             model_dir [input] [output]
 ```
 If input and output are omitted, it will read from stdin and write to stdout.
@@ -85,13 +90,18 @@ If input and output are omitted, it will read from stdin and write to stdout.
   * `input`: Input text file, one sentence per line. When omitted jointly with output, it will read from stdin.
   * `output`: Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.
 * Optional arguments:
-  * `--score_only`: Only output one column which is the monocleaner score (default: False)
-  * `--add_lang_ident`: Add another column with the identified language if it's not disabled.
+  * `--scol`: Sentence column (starting in 1) (default: 1)
+  * `--disable_lang_ident`: Disables language identification in hardrules. (default: False)
   * `--disable_hardrules`: Disables the hardrules filtering (only monocleaner fluency scoring is applied) (default: False)
   * `--disable_minimal_length` : Don't apply minimal length rule (default: False).
+  * `--disable_hbs`: Don't group Serbo-Croatian under 'hbs' tag. (default: False)
+  * `--score_only`: Only output one column which is the monocleaner score (default: False)
+  * `--annotated_output`: Add hardrules annotation for each sentence. (default: False)
+  * `--add_lang_ident`: Add another column with the identified language if it's not disabled. (default: False)
+  * `--detect_script`: Detect writing script with FastSpell (only Serbo-Croatian is supported) (default: False)
 * Logging:
-  * `-q, --quiet`: Silent logging mode (default: False)
   * `--debug`: Debug logging mode (default: False)
+  * `-q, --quiet`: Silent logging mode (default: False)
   * `-v, --version`: show version of this script and exit
 
 ### Example
@@ -100,6 +110,79 @@ monocleaner models/es mono.es.txt mono.es.scored.txt
 ```
 
 This will use the Spanish model located at `models/es`, read `mono.es.txt` file and write the sentences to `mono.es.scored.txt` adding the monocleaner score column.
+
+## Monocleaner hard-rules
+`monocleaner-hardrules` is an optional pre-filtering step for obvious noise based on rules and incorrect language identified by [FastSpell](https://github.com/mbanon/fastspell). It can be used integrated into the `monocleaner` endpoint, or separately.
+
+### Cleaning
+`monocleaner-hardrules` aims at detecting obvious noisey sentences in a monolingual corpus. Sentences that are considered noisy will be tagged with a `0` and the rest will be tagged with a `1`. By default, the input monolingual file must contain at least one column with the sentences needed to be cleaned. If more columns are present, the column index of the sentences desired to be cleaned can be customized via the `--scol` parameter.
+
+By default, the generated output file will contain the same lines and columns that the original input file has, however, an extra column containing the Monocleaner hard-rules score is added. The amount of newly inserted columns will vary depending on which parameters are enabled.
+
+This tool can be run with:
+```bash
+monocleaner-hardrules [-h]
+            [--scol SCOL]
+            [--disable_lang_ident]
+            [--disable_minimal_length]
+            [--disable_hbs]
+            [--score_only]
+            [--add_lang_ident]
+            [--detect_script]
+            [--annotated_output]
+            [--debug]
+            [-q]
+            [-v]
+            language [input] [output]
+```
+
+### Parameters
+* Positional arguments:
+  * `language`: Language code of corpus in ISO 639-1 format (2-char code).
+  * `input`: Input text file, one sentence per line. When omitted jointly with output, it will read from stdin.
+  * `output`: Output tab-separated text file adding monocleaner score. When omitted output will be written to stdout.
+* Optional arguments:
+  * `--scol`: Sentence column (starting in 1) (default: 1)
+  * `--disable_lang_ident`: Disables language identification in hardrules. (default: False)
+  * `--disable_minimal_length` : Don't apply minimal length rule (default: False).
+  * `--disable_hbs`: Don't group Serbo-Croatian under 'hbs' tag. (default: False)
+  * `--score_only`: Only output one column which is the monocleaner score (default: False)
+  * `--add_lang_ident`: Add another column with the identified language if it's not disabled. (default: False)
+  * `--detect_script`: Detect writing script with FastSpell (only Serbo-Croatian is supported) (default: False)
+  * `--annotated_output`: Add hardrules annotation for each sentence. (default: False)
+* Logging:
+  * `--debug`: Debug logging mode (default: False)
+  * `-q, --quiet`: Silent logging mode (default: False)
+  * `-v, --version`: show version of this script and exit
+
+### Example
+```bash
+monocleaner-hardrules en mono.en.txt mono.en.scored.txt
+```
+
+### Understanding annotated output
+When using the `--annotated_output` flag, an extra column with each sentence's evaluation is added to the output. If the evaluation returns the `keep` tag (with score column: 1), it means that the sentence is considered good and passed all filters. However, any other tag value (with score column: 0) in the extra column means that the sentence should be rejected. The rejection reasons, their meaning, and the order in which hard-rules are applied, is shown below:
+
+```
+no_empty	Sentence is empty
+no_titles	All words in source sentence or target sentence are uppercased or in titlecase
+not_too_long	Sentence is more than 1024 characters long
+not_too_short	Sentence is less than	3 words long
+no_bad_encoding	Source sentence or target sentence contains mojibake
+no_only_symbols	The ratio of non-alphabetic characters in source sentence is more than 90%
+no_only_numbers	The ratio of numeric characters in source sentence is too high
+no_urls	There are URLs (disabled by default)
+no_breadcrumbs	There are more than 2 breadcrumb characters in the sentence
+no_unicode_noise	Too many characters from unwanted unicode in source sentence
+no_space_noise	Too many consecutive single characters separated by spaces in the sentence (excludes digits)
+no_paren	Too many parenthesis or brackets in sentence
+no_literals	Unwanted literals: "Re:","{{", "%s", "}}", "+++", "***", '=\"'
+no_escaped_unicode	There is unescaped unicode characters in sentence
+no_glued_words	There are words in the sentence containing too many uppercased characters between lowercased characters
+no_repeated_words There are more than 1 consecutive words repeated
+no_wrong_language	Sentence is not in the desired language specifide in the cleaning command
+```
+
 
 ___
 

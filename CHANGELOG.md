@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.6
+### Added
+- `monocleaner-hardrules` is now a standalone script.
+
+### Changed
+- Updated Readme
+
 ## v1.5
 ### Added
 - `monocleaner-download` quiet mode.

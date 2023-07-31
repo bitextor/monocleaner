@@ -10,12 +10,12 @@ try:
     from . import __version__
     from .lm import *
     from .util import logging_setup, check_if_folder, check_positive
-    from .hardrules import wrong_segment
+    from .hardrules import wrong_segment, Hardrules
 except (SystemError, ImportError):
     from monocleaner import __version__
     from lm import *
     from util import logging_setup, check_if_folder, check_positive
-    from hardrules import wrong_segment
+    from hardrules import wrong_segment, Hardrules
 
 def initialization():
     parser = ArgumentParser()
@@ -31,6 +31,7 @@ def initialization():
     parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled")
     parser.add_argument("--detect_script", action='store_true', help="Detect writing script with FastSpell (only Serbo-Croatian is supported)")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
+    parser.add_argument("--run_all_rules", action='store_true', help="Run all hardrules for each sentence instead of stopping at the first one discarded")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
     parser.add_argument('-v', '--version', action='version', version="%(prog)s " + __version__, help="show version of this script and exit")
@@ -80,6 +81,9 @@ def perform_scoring(args):
 
     nline = 0
     langid = None
+    
+    hardrules = Hardrules(args)
+    
     for line in args.input:
         nline += 1
         parts = line.rstrip("\n").split("\t")
@@ -91,7 +95,7 @@ def perform_scoring(args):
             continue
 
         # Obtain hardrules tag
-        tag = wrong_segment(sentence, args)
+        tag = wrong_segment(sentence, args, hardrules)
 
         # Language identification
         # Only run if not disabled or not discarded or if it's requested in the output
@@ -110,7 +114,7 @@ def perform_scoring(args):
             if not args.disable_hardrules \
                     and tag == "keep" \
                     and langid_no_suffix != args.language:
-                tag = 'c_wrong_language'
+                tag = 'no_wrong_language'
 
         # Score with lm non discarded sentences
         if tag == "keep":

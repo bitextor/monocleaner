@@ -43,6 +43,13 @@ def initialization():
         args.output = sys.stdout
     if args.input == None:
         args.input = sys.stdin
+        
+    # Language identification sanity checks
+    if args.disable_lang_ident:
+        args.add_lang_ident = False
+    else:
+        if args.add_lang_ident:
+            args.disable_lang_ident = False
 
     logging_setup(args)
     load_model(args)
@@ -112,9 +119,15 @@ def perform_scoring(args):
             # Hardrule of langident here, to avoid calling fastspell two times
             # have the language prediction available to print it
             if not args.disable_hardrules \
-                    and tag == "keep" \
                     and langid_no_suffix != args.language:
-                tag = 'no_wrong_language'
+                if args.run_all_rules:
+                    if tag == 'keep':
+                        tag = 'no_wrong_language'
+                    else:
+                        tag += '+no_wrong_language'
+                else:
+                    if tag == 'keep':
+                        tag = 'no_wrong_language'
 
         # Score with lm non discarded sentences
         if tag == "keep":

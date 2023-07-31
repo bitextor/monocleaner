@@ -246,9 +246,16 @@ def initialization():
         args.fastspell = FastSpell(args.language, mode="aggr",
                                     hbs=not args.disable_hbs,
                                     script=args.detect_script)
+        
+    # Language identification sanity checks
+    if args.disable_lang_ident:
+        args.add_lang_ident = False
+    else:
+        if args.add_lang_ident:
+            args.disable_lang_ident = False
     
     # This is just to skip over the disable_hardrules parameter
-    # that can be enabled from the monocleaner endpoint
+    # which can be enabled only from the monocleaner endpoint
     args.disable_hardrules = False
     
     return args

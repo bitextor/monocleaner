@@ -10,12 +10,12 @@ try:
     from . import __version__
     from .lm import *
     from .util import logging_setup, check_if_folder, check_positive
-    from .hardrules import wrong_segment, Hardrules
+    from .hardrules import Hardrules
 except (SystemError, ImportError):
     from monocleaner import __version__
     from lm import *
     from util import logging_setup, check_if_folder, check_positive
-    from hardrules import wrong_segment, Hardrules
+    from hardrules import Hardrules
 
 def initialization():
     parser = ArgumentParser()
@@ -102,7 +102,7 @@ def perform_scoring(args):
             continue
 
         # Obtain hardrules tag
-        tag = wrong_segment(sentence, args, hardrules)
+        tag = hardrules.wrong_segment(args, sentence)
 
         # Language identification
         # Only run if not disabled or not discarded or if it's requested in the output
@@ -135,18 +135,18 @@ def perform_scoring(args):
         else:
             score = 0
 
-        # always print score
         # print sentence when no score_only
-        # print hardrule annotation if requested
+        # always print score
         # print identified language if requested
+        # print hardrule annotation if requested
         if not args.score_only:
             args.output.write(line.rstrip("\n") + '\t')
-        if args.add_lang_ident:
-            args.output.write(langid + '\t')
         if tag != "keep":
             args.output.write(f"{score}")
         else:
             args.output.write(f"{score:.3f}")
+        if args.add_lang_ident:
+            args.output.write('\t' + langid)
         if args.annotated_output:
             args.output.write('\t' + tag)
         args.output.write("\n")

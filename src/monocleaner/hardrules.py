@@ -178,6 +178,27 @@ class Hardrules():
                 return langid_no_suffix, False
         return self.language, True
 
+    def wrong_segment(self, args, sentence):
+        if args.disable_hardrules:
+            return 'keep'
+
+        discarded = []
+
+        for rule_name in self.rules:
+            rule = getattr(self, rule_name)
+            result = rule(sentence)
+
+            # If rule applied fails, then only add the rule name to discarded
+            if not result:
+                discarded.append(rule_name.replace('c_', '', 1))
+            
+            # If user doesn't want to run all rules, stop after the first one that fails
+            if not result and not args.run_all_rules:
+                return ''.join(discarded)
+
+        if discarded == []:
+            return 'keep'
+        return '+'.join(discarded)
 
 '''
 def c_unwanted(sentence):
@@ -187,29 +208,6 @@ def c_inconditional(sentence):
     return len(regex_inconditional.findall(sentence)) < 1
 
 '''
-
-
-def wrong_segment(sentence, args, hardrules):
-    if args.disable_hardrules:
-        return 'keep'
-
-    discarded = []
-
-    for rule_name in hardrules.rules:
-        rule = getattr(hardrules, rule_name)
-        result = rule(sentence)
-
-        # If rule applied fails, then only add the rule name to discarded
-        if not result:
-            discarded.append(rule_name.replace('c_', '', 1))
-        
-        # If user doesn't want to run all rules, stop after the first one that fails
-        if not result and not args.run_all_rules:
-            return ''.join(discarded)
-
-    if discarded == []:
-        return 'keep'
-    return '+'.join(discarded)
 
 
 def initialization():
@@ -280,7 +278,7 @@ def main():
             logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
             continue
         
-        hr_result = wrong_segment(line, args, hardrules)
+        hr_result = hardrules.wrong_segment(args, sentence)
         tag = hr_result
         langid = args.language
         
@@ -310,8 +308,8 @@ def main():
         
         # print sentence when no score_only
         # print score
-        # print hardrule annotation if requested
         # print identified language if requested
+        # print hardrule annotation if requested
         if not args.score_only:
             args.output.write(line.rstrip("\n") + '\t')
         args.output.write("{0}".format(score))

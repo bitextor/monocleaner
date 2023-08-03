@@ -10,12 +10,12 @@ try:
     from . import __version__
     from .lm import *
     from .util import logging_setup, check_if_folder, check_positive
-    from .hardrules import wrong_segment
+    from .hardrules import Hardrules
 except (SystemError, ImportError):
     from monocleaner import __version__
     from lm import *
     from util import logging_setup, check_if_folder, check_positive
-    from hardrules import wrong_segment
+    from hardrules import Hardrules
 
 def initialization():
     parser = ArgumentParser()
@@ -31,6 +31,7 @@ def initialization():
     parser.add_argument("--add_lang_ident", action='store_true', help="Add another column with the identified language if it's not disabled")
     parser.add_argument("--detect_script", action='store_true', help="Detect writing script with FastSpell (only Serbo-Croatian is supported)")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
+    parser.add_argument("--run_all_rules", action='store_true', help="Run all hardrules for each sentence instead of stopping at the first one discarded")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
     parser.add_argument('-v', '--version', action='version', version="%(prog)s " + __version__, help="show version of this script and exit")
@@ -42,6 +43,13 @@ def initialization():
         args.output = sys.stdout
     if args.input == None:
         args.input = sys.stdin
+        
+    # Language identification sanity checks
+    if args.disable_lang_ident:
+        args.add_lang_ident = False
+    else:
+        if args.add_lang_ident:
+            args.disable_lang_ident = False
 
     logging_setup(args)
     load_model(args)
@@ -80,6 +88,9 @@ def perform_scoring(args):
 
     nline = 0
     langid = None
+    
+    hardrules = Hardrules(args)
+    
     for line in args.input:
         nline += 1
         parts = line.rstrip("\n").split("\t")
@@ -91,7 +102,7 @@ def perform_scoring(args):
             continue
 
         # Obtain hardrules tag
-        tag = wrong_segment(sentence, args)
+        tag = hardrules.wrong_segment(args, sentence)
 
         # Language identification
         # Only run if not disabled or not discarded or if it's requested in the output
@@ -108,9 +119,15 @@ def perform_scoring(args):
             # Hardrule of langident here, to avoid calling fastspell two times
             # have the language prediction available to print it
             if not args.disable_hardrules \
-                    and tag == "keep" \
                     and langid_no_suffix != args.language:
-                tag = 'c_wrong_language'
+                if args.run_all_rules:
+                    if tag == 'keep':
+                        tag = 'no_wrong_language'
+                    else:
+                        tag += '+no_wrong_language'
+                else:
+                    if tag == 'keep':
+                        tag = 'no_wrong_language'
 
         # Score with lm non discarded sentences
         if tag == "keep":
@@ -118,18 +135,18 @@ def perform_scoring(args):
         else:
             score = 0
 
-        # always print score
         # print sentence when no score_only
-        # print hardrule annotation if requested
+        # always print score
         # print identified language if requested
+        # print hardrule annotation if requested
         if not args.score_only:
             args.output.write(line.rstrip("\n") + '\t')
-        if args.add_lang_ident:
-            args.output.write(langid + '\t')
         if tag != "keep":
             args.output.write(f"{score}")
         else:
             args.output.write(f"{score:.3f}")
+        if args.add_lang_ident:
+            args.output.write('\t' + langid)
         if args.annotated_output:
             args.output.write('\t' + tag)
         args.output.write("\n")

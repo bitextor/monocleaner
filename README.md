@@ -77,12 +77,22 @@ monocleaner [-h]
             [--annotated_output]
             [--add_lang_ident]
             [--detect_script]
+            [--run_all_rules]
             [--debug]
             [-q]
             [-v]
             model_dir [input] [output]
 ```
 If input and output are omitted, it will read from stdin and write to stdout.
+
+The output file will contain the following columns which will appear in the strict order indicated below depending on the previous parameters:
+
+| Column | Value            | Parameters                    |
+| ------ | ---------------- | ----------------------------- | 
+|   1    | Sentence         | Disabled by --score_only      |
+|   2    | Score            |  -                            |
+|   3    | Language Code    | Enabled by --add_lang_ident   |
+|   4    | Hardrule Tag     | Enabled by --annotated_output |
 
 ### Parameters
 * Positional arguments:
@@ -99,6 +109,7 @@ If input and output are omitted, it will read from stdin and write to stdout.
   * `--annotated_output`: Add hardrules annotation for each sentence. (default: False)
   * `--add_lang_ident`: Add another column with the identified language if it's not disabled. (default: False)
   * `--detect_script`: Detect writing script with FastSpell (only Serbo-Croatian is supported) (default: False)
+  * `--run_all_rules`: Run all hardrules for each sentence instead of stopping at the first one discarded. (default: False)
 * Logging:
   * `--debug`: Debug logging mode (default: False)
   * `-q, --quiet`: Silent logging mode (default: False)
@@ -117,7 +128,7 @@ This will use the Spanish model located at `models/es`, read `mono.es.txt` file 
 ### Cleaning
 `monocleaner-hardrules` aims at detecting obvious noisey sentences in a monolingual corpus. Sentences that are considered noisy will be tagged with a `0` and the rest will be tagged with a `1`. By default, the input monolingual file must contain at least one column with the sentences needed to be cleaned. If more columns are present, the column index of the sentences desired to be cleaned can be customized via the `--scol` parameter.
 
-By default, the generated output file will contain the same lines and columns that the original input file has, however, an extra column containing the Monocleaner hard-rules score is added. The amount of newly inserted columns will vary depending on which parameters are enabled.
+By default, the generated output file will contain the same lines and columns that the original input file has, however, an extra column containing the Monocleaner hard-rules score is always added. The amount of newly inserted columns will vary depending on which parameters are enabled.
 
 This tool can be run with:
 ```bash
@@ -130,11 +141,21 @@ monocleaner-hardrules [-h]
             [--add_lang_ident]
             [--detect_script]
             [--annotated_output]
+            [--run_all_rules]
             [--debug]
             [-q]
             [-v]
             language [input] [output]
 ```
+
+The output file will contain the following columns which will appear in the strict order indicated below depending on the previous parameters:
+
+| Column | Value            | Parameters                    |
+| ------ | ---------------- | ----------------------------- | 
+|   1    | Sentence         | Disabled by --score_only      |
+|   2    | Score            |  -                            |
+|   3    | Language Code    | Enabled by --add_lang_ident   |
+|   4    | Hardrule Tag     | Enabled by --annotated_output |
 
 ### Parameters
 * Positional arguments:
@@ -150,6 +171,7 @@ monocleaner-hardrules [-h]
   * `--add_lang_ident`: Add another column with the identified language if it's not disabled. (default: False)
   * `--detect_script`: Detect writing script with FastSpell (only Serbo-Croatian is supported) (default: False)
   * `--annotated_output`: Add hardrules annotation for each sentence. (default: False)
+  * `--run_all_rules`: Run all hardrules for each sentence instead of stopping at the first one discarded. (default: False)
 * Logging:
   * `--debug`: Debug logging mode (default: False)
   * `-q, --quiet`: Silent logging mode (default: False)

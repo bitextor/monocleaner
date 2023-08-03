@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.6.1
+
+### Changed
+- `monocleaner-hardrules` now supports `--run_all_rules`
+
 ## v1.6
 ### Added
 - `monocleaner-hardrules` is now a standalone script.

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.2
+- Fix divison by 0 error on empty sentences.
+- Fixed rules that were giving false positives on empty sentences (no  titles, wrong language)
+- For performance, long setences (>1024 chars.) are ignored by default, only "not_too_long" is outputed. Added "--dont_ignore_long" flag to override this
+behaviour.
+
 ## v1.6.1
 
 ### Changed

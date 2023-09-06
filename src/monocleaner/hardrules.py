@@ -61,6 +61,8 @@ class Hardrules():
         return sentence != ""
 
     def c_no_titles(self, sentence):    
+        if len(sentence) == 0:
+            return True
         return len(sentence.strip().split(" ")) > 1
 
     def c_not_too_long(self, sentence):
@@ -85,12 +87,16 @@ class Hardrules():
         return True
 
     def c_no_only_symbols(self, sentence):
+        if len(sentence) == 0:
+            return True
         return len(regex_alpha.findall(sentence)) / len(sentence) > 0.1
 
     def c_no_only_numbers(self, sentence):
         threshold = 0.5
         if self.language in CJK:
             threshold = 0.7
+        if len(sentence) == 0:
+            return True
         return len(regex_numbers.findall(sentence)) / len(sentence) < threshold
 
     def c_no_urls(self, sentence):
@@ -163,7 +169,7 @@ class Hardrules():
         return True
 
     def z_no_wrong_language(self, sentence):
-        if not self.disable_lang_ident:
+        if (not self.disable_lang_ident) and len(sentence) > 0:
             # Obtain fastspell prediction, lowercasing helps in small langs
             langid = self.fastspell.getlang(sentence.lower())
 
@@ -224,6 +230,7 @@ def initialization():
     parser.add_argument("--detect_script", action='store_true', help="Detect writing script with FastSpell (only Serbo-Croatian is supported)")
     parser.add_argument("--annotated_output", action='store_true', help="Add hardrules annotation for each sentence")
     parser.add_argument("--run_all_rules", action='store_true', help="Run all hardrules for each sentence instead of stopping at the first one discarded")
+    parser.add_argument('--dont_ignore_long', default=False, action='store_true', help="Don't ignore too long sentences")
     parser.add_argument("--debug", action='store_true')
     parser.add_argument("-q", "--quiet", action='store_true')
     parser.add_argument('-v', '--version', action='version', version="%(prog)s " + __version__, help="show version of this script and exit")
@@ -268,39 +275,49 @@ def main():
     hardrules = Hardrules(args)
     
     nline = 0
+
     for line in args.input:
         nline += 1
+        tag = ""
         parts = line.rstrip("\n").split("\t")
 
         if len(parts) >= args.scol:
             sentence = parts[args.scol-1]
         else:
             logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
-            continue
+            sentence = ""
+            tag = "c_missing_columns"
+            #continue
         
-        hr_result = hardrules.wrong_segment(args, sentence)
-        tag = hr_result
-        langid = args.language
         
-        # Language identification rule and output
-        if not args.disable_lang_ident:
-            # If run all rules is enabled, run the identification method.
-            # If it doesn't pass, then set the tag accordingly if other hardrules have failed.
-            if args.run_all_rules:
-                langid, res = hardrules.z_no_wrong_language(line)
-
-                if not res:
-                    if tag == 'keep':
-                        tag = 'no_wrong_language'
-                    else:
-                        tag += '+no_wrong_language'
-            else:
-                # If run all rules is disabled, then only run identification method when all other hardrules have passed
-                if tag == 'keep':
-                    langid, res = hardrules.z_no_wrong_language(line)
+        if not args.dont_ignore_long and (len(line) > 1024):
+            tag = "c_not_too_long"
+            #continue
+        
+        if tag == "":        
+            hr_result = hardrules.wrong_segment(args, sentence)
+            tag = hr_result
+            langid = args.language
+        
+            # Language identification rule and output
+            if (not args.disable_lang_ident) and len(line) > 0:
+                # If run all rules is enabled, run the identification method.
+                # If it doesn't pass, then set the tag accordingly if other hardrules have failed.
+                if args.run_all_rules:
+                    langid, res = hardrules.z_no_wrong_language(sentence)
                     
                     if not res:
-                        tag = 'no_wrong_language'
+                        if tag == 'keep':
+                            tag = 'no_wrong_language'
+                        else:
+                            tag += '+no_wrong_language'
+                else:
+                    # If run all rules is disabled, then only run identification method when all other hardrules have passed
+                    if tag == 'keep':
+                        langid, res = hardrules.z_no_wrong_language(sentence)
+                        
+                        if not res:
+                            tag = 'no_wrong_language'
         
         score = 1
         if tag != "keep":

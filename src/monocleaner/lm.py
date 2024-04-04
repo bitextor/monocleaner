@@ -88,6 +88,7 @@ class LMFluencyFilter:
         self.normalizer = MosesPunctNormalizer(lang=self.language)
         self.type = lm_type
         self.scoring_stats = None
+        self.is_cjk = language in ('ja', 'zh', 'ko')
 
     @classmethod
     def _ispunctuation(cls, t):
@@ -133,6 +134,8 @@ class LMFluencyFilter:
 
         if self.type != LMType.CHARACTER:
             tokline = " ".join(self.tokenizer.tokenize(sentence))
+        elif self.is_cjk:
+            tokline = " ".join(map(str, [i for i in sentence.encode()]))
         else:
             tokline = " ".join([ "SPACE" if c == " " else c for c in sentence  ])
         return tokline

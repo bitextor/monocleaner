@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.6.3
+- Fix inconsistent rule naming for not_too_long and missing_columns.
+
 ## v1.6.2
 - Fix divison by 0 error on empty sentences.
 - Fixed rules that were giving false positives on empty sentences (no  titles, wrong language)

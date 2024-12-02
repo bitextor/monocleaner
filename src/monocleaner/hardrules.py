@@ -286,12 +286,12 @@ def main():
         else:
             logging.error(f" scol ({args.scol}) index above column number ({len(parts)}) on line {nline}")
             sentence = ""
-            tag = "c_missing_columns"
+            tag = "missing_columns"
             #continue
         
         
         if not args.dont_ignore_long and (len(line) > 1024):
-            tag = "c_not_too_long"
+            tag = "not_too_long"
             #continue
         
         if tag == "":        

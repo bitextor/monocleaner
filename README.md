@@ -39,21 +39,22 @@ sudo apt install python-dev
 Monocleaner can be installed using `pip`:
 
 ```bash
-python3 -m pip install monocleaner
+pip install monocleaner git+https://github.com/MSeal/cython_hunspell@2.0.3
 ```
 
-Monocleaner requires the [KenLM](https://github.com/kpu/kenlm) Python bindings with support for 7-gram language models. You can easily install it by running the following commands:
+Monocleaner requires the [KenLM](https://github.com/kpu/kenlm) Python bindings with support for 7-gram language models. You can easily install it by running the following command:
+```
+pip install --config-settings="--build-option=--max_order=7" https://github.com/kpu/kenlm/archive/master.zip
+```
 
+To be able to train Monocleaner models, the rest of the KenLM toolkit needs to be installed in addition to the Python bindings:
 ```bash
 git clone https://github.com/kpu/kenlm
 cd kenlm
-pip install --config-settings="--build-option=--max_order=7" .
 mkdir -p build && cd build
 cmake .. -DKENLM_MAX_ORDER=7 -DCMAKE_INSTALL_PREFIX:PATH=/your/prefix/path
 make -j all install
 ```
-
-The remaining extra modules required by Monocleaner will be automatically downloaded and installed/upgraded (if required) with the first command.
 
 After installation, two binary files (`monocleaner-train` and `monocleaner`) will be located in your `python/installation/prefix/bin` directory. This is usually `$HOME/.local/bin` or `/usr/local/bin/`.
 

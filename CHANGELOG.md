@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.6.4
+- Use models v1.0 download URL for retrocompatibility.
+
 ## v1.6.3
 - Fix inconsistent rule naming for not_too_long and missing_columns.
 

@@ -29,7 +29,7 @@ do
     esac
 done
 
-URL="https://github.com/bitextor/monocleaner-data/releases/latest/download"
+URL="https://github.com/bitextor/monocleaner-data/releases/download/v1.0"
 L1=${@:$OPTIND:1}
 DOWNLOAD_PATH=${@:$OPTIND+1:1}
 if [ -z $L1 ];

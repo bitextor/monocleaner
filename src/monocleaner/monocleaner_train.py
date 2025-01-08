@@ -14,6 +14,7 @@ def initialization():
     parser.add_argument("model_dir", type=check_if_folder, help="Model directory to store LM file and metadata.")
     parser.add_argument("-l", "--language", type=str, required=True, help="Language code of the model.")
     parser.add_argument("--dev_size", default=4000, type=int, help="Number of sentences used to estimate mean and stddev perplexity on noisy and clean text. Extracted from training the training corpus.")
+    parser.add_argument("--dev", type=str, help="Development set to estimate mean and stddev perplexity")
     parser.add_argument("--lm_type", default=LMType.CHARACTER, type=lambda t: LMType[t], choices=list(LMType))
     parser.add_argument("--tokenizer_command", default=None, help="Tokenizer command to replace Moses tokenizer when using PLACEHOLDER LMType.")
     parser.add_argument("--debug", action='store_true')
@@ -41,9 +42,16 @@ def write_metadata(stats: LMStats, args):
 
 def perform_training(args):
     logging.info("Shuffling input text")
-    with open(args.train) as f_:
-        train_file, dev_file = shuffle_lm_training(f_, args.dev_size)
-        dev_noisy = shuffle_chars(dev_file)
+    if args.dev:
+        train_file = NamedTemporaryFile("w+", delete=False).name
+        shutil.copyfile(args.train, train_file)
+        dev_file = NamedTemporaryFile("w+", delete=False).name
+        shutil.copyfile(args.dev, dev_file)
+        dev_noisy = shuffle_chars(args.dev)
+    else:
+        with open(args.train) as f_:
+            train_file, dev_file = shuffle_lm_training(f_, args.dev_size)
+            dev_noisy = shuffle_chars(dev_file)
 
     try:
         # Train language model

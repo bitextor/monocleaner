@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7
+- Use byte-level models for CJK.
+- Added option to use a custom development set.
+- Update FastSpell to 0.12.
+
 ## v1.6.4
 - Use models v1.0 download URL for retrocompatibility.
 

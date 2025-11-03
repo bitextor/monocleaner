@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.7.1
+- Added 3-letter codes for CJK exceptions.
+
 ## v1.7
 - Use byte-level models for CJK.
 - Added option to use a custom development set.
